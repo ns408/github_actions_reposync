@@ -22,7 +22,6 @@ echo "TEMP_BRANCH: $TEMP_BRANCH"
 
 ## Add $UPSTREAM_REPO as upstream
 git remote add upstream "$UPSTREAM_REPO"
-git fetch upstream
 
 for item in $(git diff $LOCAL_BRANCH upstream/${UPSTREAM_BRANCH} --name-only); do
   if [[ $item == ".github/workflows/komodod_cd.yml" || $item == ".github/workflows/komodod_ci.yml" || $item == ".github/workflows/repo-sync.yml" ]]; then
@@ -32,6 +31,7 @@ for item in $(git diff $LOCAL_BRANCH upstream/${UPSTREAM_BRANCH} --name-only); d
 done
 
 # Copy $LOCAL_BRANCH to $TEMP_BRANCH
+git fetch origin $LOCAL_BRANCH
 git checkout -b $TEMP_BRANCH $LOCAL_BRANCH
 git checkout $LOCAL_BRANCH
 
@@ -43,6 +43,7 @@ fi
 git remote set-url origin "https://$GITHUB_ACTOR:$GITHUB_TOKEN@github.com/$GITHUB_REPOSITORY"
 
 # Reset $LOCAL_BRANCH to match $UPSTREAM_REPO
+git fetch upstream
 git reset --hard upstream/${UPSTREAM_BRANCH}
 
 # Restore files from the local branch
