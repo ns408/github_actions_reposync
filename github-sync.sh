@@ -40,7 +40,7 @@ fi
 # Copy $LOCAL_BRANCH to $TEMP_BRANCH
 echo -e "### Testing """
 git remote -v
-git fetch origin $LOCAL_BRANCH
+git fetch origin $LOCAL_BRANCH:$LOCAL_BRANCH
 git checkout -b $TEMP_BRANCH $LOCAL_BRANCH
 git checkout $LOCAL_BRANCH
 
