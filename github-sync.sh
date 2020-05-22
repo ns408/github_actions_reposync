@@ -37,7 +37,7 @@ fi
 git remote set-url origin "https://$GITHUB_ACTOR:$GITHUB_TOKEN@github.com/$GITHUB_REPOSITORY"
 
 # Reset $LOCAL_BRANCH to match $UPSTREAM_REPO
-git fetch upstream $UPSTREAM_BRANCH:$UPSTREAM_BRANCH
+git fetch upstream
 git reset --hard upstream/${UPSTREAM_BRANCH}
 
 for item in $(git diff $LOCAL_BRANCH upstream/${UPSTREAM_BRANCH} --name-only 2> /dev/null); do
