@@ -23,7 +23,7 @@ echo "TEMP_BRANCH: $TEMP_BRANCH"
 ## Add $UPSTREAM_REPO as upstream
 git remote add upstream "$UPSTREAM_REPO"
 
-for item in $(git diff $LOCAL_BRANCH upstream/${UPSTREAM_BRANCH} --name-only); do
+for item in $(git diff $LOCAL_BRANCH upstream/${UPSTREAM_BRANCH} --name-only 2> /dev/null); do
   if [[ $item == ".github/workflows/komodod_cd.yml" || $item == ".github/workflows/komodo_mac_ci.yml" || $item == ".github/workflows/komodo_linux_ci.yml" || $item == ".github/workflows/komodo_win_ci.yml" ]]; then
     echo -e "## No change detected. ##\n"
     exit 0
