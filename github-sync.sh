@@ -24,7 +24,7 @@ echo "TEMP_BRANCH: $TEMP_BRANCH"
 git remote add upstream "$UPSTREAM_REPO"
 
 for item in $(git diff $LOCAL_BRANCH upstream/${UPSTREAM_BRANCH} --name-only); do
-  if [[ $item == ".github/workflows/komodod_cd.yml" || $item == ".github/workflows/komodod_ci.yml" || $item == ".github/workflows/repo-sync.yml" ]]; then
+  if [[ $item == ".github/workflows/komodod_cd.yml" || $item == ".github/workflows/komodod_ci.yml" || $item == ".github/workflows/komodo_mac_ci.yml" || $item == ".github/workflows/komodo_linux_ci.yml" || $item == ".github/workflows/komodo_win_ci.yml" || $item == ".github/workflows/repo-sync.yml" ]]; then
     echo -e "## No change detected. ##\n"
     exit 0
   fi
@@ -47,7 +47,7 @@ git fetch upstream
 git reset --hard upstream/${UPSTREAM_BRANCH}
 
 # Restore files from the local branch
-for item in repo-sync.yml komodod_ci.yml komodod_cd.yml; do
+for item in repo-sync.yml komodod_ci.yml komodod_cd.yml komodo_mac_ci.yml komodo_linux_ci.yml komodo_win_ci.yml; do
   git checkout $TEMP_BRANCH .github/workflows/${item}
 done
 
