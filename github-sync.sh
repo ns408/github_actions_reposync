@@ -30,6 +30,13 @@ for item in $(git diff $LOCAL_BRANCH upstream/${UPSTREAM_BRANCH} --name-only); d
   fi
 done
 
+# Remove extra headers
+git config --unset-all http."https://github.com/".extraheader || true
+
+if ! (git remote get-url origin); then
+  git remote add origin https://github.com/${GITHUB_REPOSITORY}
+fi
+
 # Copy $LOCAL_BRANCH to $TEMP_BRANCH
 echo -e "### Testing """
 git remote -v
@@ -37,11 +44,6 @@ git fetch origin $LOCAL_BRANCH
 git checkout -b $TEMP_BRANCH $LOCAL_BRANCH
 git checkout $LOCAL_BRANCH
 
-git config --unset-all http."https://github.com/".extraheader || true
-
-if ! (git remote get-url origin); then
-  git remote add origin https://github.com/${GITHUB_REPOSITORY}
-fi
 git remote set-url origin "https://$GITHUB_ACTOR:$GITHUB_TOKEN@github.com/$GITHUB_REPOSITORY"
 
 # Reset $LOCAL_BRANCH to match $UPSTREAM_REPO
