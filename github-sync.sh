@@ -23,6 +23,13 @@ echo "TEMP_BRANCH: $TEMP_BRANCH"
 ## Add $UPSTREAM_REPO as upstream
 git remote add upstream "$UPSTREAM_REPO"
 
+for item in $(git diff $LOCAL_BRANCH upstream/${UPSTREAM_BRANCH} --name-only 2> /dev/null); do
+  if [[ $item == ".github/workflows/komodod_cd.yml" || $item == ".github/workflows/komodo_mac_ci.yml" || $item == ".github/workflows/komodo_linux_ci.yml" || $item == ".github/workflows/komodo_win_ci.yml" ]]; then
+    echo -e "## No change detected. ##\n"
+    exit 0
+  fi
+done
+
 # Remove extra headers
 git config --unset-all http."https://github.com/".extraheader || true
 
@@ -39,13 +46,6 @@ git remote set-url origin "https://$GITHUB_ACTOR:$GITHUB_TOKEN@github.com/$GITHU
 # Reset $LOCAL_BRANCH to match $UPSTREAM_REPO
 git fetch upstream
 git reset --hard upstream/${UPSTREAM_BRANCH}
-
-for item in $(git diff $LOCAL_BRANCH upstream/${UPSTREAM_BRANCH} --name-only 2> /dev/null); do
-  if [[ $item == ".github/workflows/komodod_cd.yml" || $item == ".github/workflows/komodo_mac_ci.yml" || $item == ".github/workflows/komodo_linux_ci.yml" || $item == ".github/workflows/komodo_win_ci.yml" ]]; then
-    echo -e "## No change detected. ##\n"
-    exit 0
-  fi
-done
 
 # Restore files from the local branch
 for item in komodod_cd.yml komodo_mac_ci.yml komodo_linux_ci.yml komodo_win_ci.yml; do
